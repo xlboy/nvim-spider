@@ -68,21 +68,22 @@ end
 local function getNextPosition(line, col, key, opts)
 	-- INFO `%f[set]` is used to emulate `#b`
 	local patterns = {
-		camelCaseWord = "%u?[%l]+",
-		ALL_UPPER_CASE = "%f[%w][%u]+%f[^%w]",
-		number = "%d+", -- see issue #31
-		punctuation = "%f[^%s]%p+%f[%s]", -- punctuation surrounded by whitespace
-		punctuationAtStart = "^%p+%f[%s]",
-		punctuationAtEnd = "%f[^%s]%p+$",
-		onlyPunctuationLine = "^%p+$",
+		camelCaseWord = "[%w-_]+",
+		-- camelCaseWord = "%u?[%l]+",
+		-- ALL_UPPER_CASE = "%f[%w][%u]+%f[^%w]",
+		-- number = "%d+", -- see issue #31
+		-- punctuation = "%f[^%s]" .. symbol .. "%f[%s]", -- punctuation surrounded by whitespace
+		-- punctuationAtStart = "^" .. symbol .. "%f[%s]",
+		-- punctuationAtEnd = "%f[^%s] " .. symbol .. "$",
+		-- onlyPunctuationLine = "^" .. symbol .. "$",
 	}
-	if not opts.skipInsignificantPunctuation then patterns.punctuation = "%p+" end
+	-- if not opts.skipInsignificantPunctuation then patterns.punctuation = "%p+" end
 
 	-- define motion properties
 	local backwards = (key == "b") or (key == "ge")
 	local endOfWord = (key == "ge") or (key == "e")
 	if backwards then
-		patterns.camelCaseWord = "[%l%d]+%u?" -- the other patterns are already symmetric
+		-- patterns.camelCaseWord = "[%l%d]+%u?" -- the other patterns are already symmetric
 		line = line:reverse()
 		endOfWord = not endOfWord
 		if col == -1 then
